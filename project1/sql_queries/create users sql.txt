@@ -10,3 +10,10 @@ VALUES
   ('admin', 'admin', 'admin'),
   ('rep', 'rep', 'rep'),
   ('customer', 'customer', 'customer');
+  
+  CREATE TABLE stations (
+	sid INT PRIMARY KEY auto_increment,
+    name VARCHAR(100) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(50) NOT NULL
+);
