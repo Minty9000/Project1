@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class DBUtil {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/login_demo";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "Gilbert@6737";
+    private static final String DB_PASS = "Password";
 
     public static Connection getConnection() throws SQLException {
         try {
