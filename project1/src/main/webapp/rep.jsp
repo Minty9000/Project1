@@ -5,15 +5,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Transit Line Management</title>
 </head>
 <body>
-	<p>welcome rep</p>
 	
-	<form method="get" action="StationServlet">
-  		<button type="submit">Show Stations</button>
-	</form>
 	
+	<h2>Train Stations</h2>
 	<table border="1">
     <tr>
         <th>ID</th>
@@ -50,6 +47,40 @@
     }
 	%>
 	</table>
+	
+	<h2>Add Train Line</h2>
+    <form method="post" action="TrainlineServlet">
+    	Name: <input type="text" name="name" /><br/>
+    	
+    	Origin: 
+    	<select name="origin">
+        	<% if (stations != null) {
+               for (Station s : stations) { %>
+                   <option value="<%= s.sid %>"><%= s.name %> (<%= s.city %>, <%= s.state %>)</option>
+        	<%     }
+           } %>
+    	</select><br/>
+
+    	Destination: 
+    	<select name="destination">
+	        <% if (stations != null) {
+	               for (Station s : stations) { %>
+	                   <option value="<%= s.sid %>"><%= s.name %> (<%= s.city %>, <%= s.state %>)</option>
+	        <%     }
+	           } %>
+    	</select><br/>
+    	
+    	Total Travel Time:
+    	<input type="number" name="travelTime">
+    	<br/>
+    	
+    	Total Fare:
+    	<input type="number" name="fare">
+    	<br/>
+    	
+
+    	<input type="submit" value="Add Train Line" />
+	</form>
 	
 	<h2>Add Station</h2>
     	<form method="post" action="StationServlet">
