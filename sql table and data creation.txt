@@ -1,0 +1,73 @@
+// Create Users table. Includes roles to distinguish between customers, admins, and customer reps
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL
+);
+
+// Creates a customer, admin, and customer rep
+
+INSERT INTO users (username, password, role)
+VALUES
+  ('admin', 'admin', 'admin'),
+  ('rep', 'rep', 'rep'),
+  ('customer', 'customer', 'customer');
+
+// Creates Trainlines table. Origin and Destination reference the Stations table, so the Stations table needs to be created first
+
+CREATE TABLE Trainlines (
+    tlid INT PRIMARY KEY auto_increment,
+    name VARCHAR(100) NOT NULL,
+    origin int,
+    destination int,
+    travelTime int,
+    numOfStops int,
+    fare float,
+    FOREIGN KEY (origin) REFERENCES stations (sid),
+    FOREIGN KEY (destination) REFERENCES stations (sid)
+);
+
+// Creates Stops table. This keeps track of the stops and their associated train lines. The Trainlines and Stations tables need to be
+// created first.
+
+CREATE TABLE Stops (
+    tlid INT,
+    sid INT,
+    travelTime int,
+    stopNumber int,
+    PRIMARY KEY (tlid, sid),
+    FOREIGN KEY (tlid) REFERENCES trainlines (tlid),
+    FOREIGN KEY (sid) REFERENCES stations (sid)
+);
+
+// Add all stations from the North Jersey Coast Line
+
+INSERT INTO stations (name, city, state)
+VALUES
+  ('Bay Head', 'Bay Head', 'NJ'),
+  ('Point Pleasant Beach', 'Point Pleasant', 'NJ'),
+  ('Manasquan', 'Manasquan', 'NJ'),
+  ('Spring Lake', 'Spring Lake', 'NJ'),
+  ('Belmar', 'Belmar', 'NJ'),
+  ('Bradley Beach', 'Bradley Beach', 'NJ'),
+  ('Asbury Park', 'Asbury Park', 'NJ'),
+  ('Allenhurst', 'Allenhurst', 'NJ'),
+  ('Elberon', 'Elberon', 'NJ'),
+  ('Long Branch', 'Long Branch', 'NJ'),
+  ('Monmouth Park', 'Monmouth Park', 'NJ'),
+  ('Little Silver', 'Little Silver', 'NJ'),
+  ('Red Bank', 'Red Bank', 'NJ'),
+  ('Middletown', 'Middletown', 'NJ'),
+  ('Hazlet', 'Hazlet', 'NJ'),
+  ('Aberdeen-Matawan', 'Aberdeen', 'NJ'),
+  ('South Amboy', 'South Amboy', 'NJ'),
+  ('Perth Amboy', 'Perth Amboy', 'NJ'),
+  ('Woodbridge', 'Woodbridge', 'NJ'),
+  ('Avenel', 'Avenel', 'NJ'),
+  ('Elizabeth', 'Elizabeth', 'NJ'),
+  ('North Elizabeth', 'North Elizabeth', 'NJ'),
+  ('Newark Liberty International Airport', 'Newark', 'NJ'),
+  ('Newark Penn Station', 'Newark', 'NJ'),
+  ('New York Penn Station', 'New York', 'NY');
