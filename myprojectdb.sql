@@ -16,6 +16,40 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `reservations`
+--
+
+DROP TABLE IF EXISTS `reservations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reservations` (
+  `reservation_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `schedule_id` int DEFAULT NULL,
+  `reservation_date` datetime DEFAULT NULL,
+  `passenger_type` varchar(20) DEFAULT NULL,
+  `round_trip` tinyint(1) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `fare` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`reservation_id`),
+  KEY `user_id` (`user_id`),
+  KEY `schedule_id` (`schedule_id`),
+  CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`schedule_id`) REFERENCES `train_schedules` (`schedule_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reservations`
+--
+
+LOCK TABLES `reservations` WRITE;
+/*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
+INSERT INTO `reservations` VALUES (1,1,1,'2025-07-17 03:36:52','child',1,'active',18.50),(2,1,1,'2025-07-17 03:37:18','child',0,'active',9.25),(3,1,1,'2025-07-17 03:39:11','child',0,'active',9.25),(4,1,1,'2025-07-17 04:08:39','adult',0,'active',18.50),(5,1,4,'2025-07-17 04:10:41','adult',0,'active',20.00),(17,3,1,'2025-07-19 00:18:50','adult',0,'active',18.50),(18,3,7,'2025-07-19 00:19:11','adult',0,'cancelled',22.00),(19,3,7,'2025-07-19 00:26:25','adult',0,'active',22.00),(20,3,1,'2025-07-19 00:27:10','senior',1,'active',25.90),(21,3,1,'2025-07-19 00:44:27','adult',0,'active',18.50);
+/*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `schedule_stops`
 --
 
@@ -32,7 +66,7 @@ CREATE TABLE `schedule_stops` (
   KEY `station_id` (`station_id`),
   CONSTRAINT `schedule_stops_ibfk_1` FOREIGN KEY (`schedule_id`) REFERENCES `train_schedules` (`schedule_id`),
   CONSTRAINT `schedule_stops_ibfk_2` FOREIGN KEY (`station_id`) REFERENCES `stations` (`sid`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +75,7 @@ CREATE TABLE `schedule_stops` (
 
 LOCK TABLES `schedule_stops` WRITE;
 /*!40000 ALTER TABLE `schedule_stops` DISABLE KEYS */;
-INSERT INTO `schedule_stops` VALUES (1,1,2,'2025-07-16 07:12:00'),(2,1,3,'2025-07-16 07:24:00'),(3,1,4,'2025-07-16 07:40:00'),(4,1,6,'2025-07-16 08:05:00'),(5,1,5,'2025-07-16 08:30:00'),(6,2,6,'2025-07-16 18:15:00'),(7,2,4,'2025-07-16 18:35:00'),(8,2,3,'2025-07-16 18:50:00'),(9,2,2,'2025-07-16 19:10:00'),(10,2,1,'2025-07-16 19:30:00'),(11,3,6,'2025-07-16 08:45:00'),(12,4,2,'2025-07-16 09:12:00'),(13,4,3,'2025-07-16 09:24:00'),(14,4,4,'2025-07-16 09:40:00'),(15,4,6,'2025-07-16 10:05:00'),(16,4,5,'2025-07-16 10:30:00'),(17,5,2,'2025-07-16 11:12:00'),(18,5,3,'2025-07-16 11:24:00'),(19,5,4,'2025-07-16 11:40:00'),(20,5,6,'2025-07-16 12:05:00'),(21,5,5,'2025-07-16 12:25:00'),(22,6,2,'2025-07-16 15:12:00'),(23,6,3,'2025-07-16 15:24:00'),(24,6,4,'2025-07-16 15:40:00'),(25,6,6,'2025-07-16 16:05:00'),(26,6,5,'2025-07-16 16:25:00');
+INSERT INTO `schedule_stops` VALUES (1,1,2,'2025-07-16 07:12:00'),(2,1,3,'2025-07-16 07:24:00'),(3,1,4,'2025-07-16 07:40:00'),(4,1,6,'2025-07-16 08:05:00'),(5,1,5,'2025-07-16 08:30:00'),(6,2,6,'2025-07-16 18:15:00'),(7,2,4,'2025-07-16 18:35:00'),(8,2,3,'2025-07-16 18:50:00'),(9,2,2,'2025-07-16 19:10:00'),(10,2,1,'2025-07-16 19:30:00'),(11,3,6,'2025-07-16 08:45:00'),(12,4,2,'2025-07-16 09:12:00'),(13,4,3,'2025-07-16 09:24:00'),(14,4,4,'2025-07-16 09:40:00'),(15,4,6,'2025-07-16 10:05:00'),(16,4,5,'2025-07-16 10:30:00'),(17,5,2,'2025-07-16 11:12:00'),(18,5,3,'2025-07-16 11:24:00'),(19,5,4,'2025-07-16 11:40:00'),(20,5,6,'2025-07-16 12:05:00'),(21,5,5,'2025-07-16 12:25:00'),(22,6,2,'2025-07-16 15:12:00'),(23,6,3,'2025-07-16 15:24:00'),(24,6,4,'2025-07-16 15:40:00'),(25,6,6,'2025-07-16 16:05:00'),(26,6,5,'2025-07-16 16:25:00'),(27,6,1,'2025-07-20 10:00:00'),(28,6,2,'2025-07-20 10:30:00'),(29,6,3,'2025-07-20 11:00:00'),(30,6,5,'2025-07-20 12:30:00'),(31,7,1,'2025-07-20 10:00:00'),(32,7,2,'2025-07-20 10:24:00'),(33,7,3,'2025-07-20 10:35:00'),(34,7,5,'2025-07-20 12:30:00'),(35,8,1,'2025-07-22 09:00:00'),(36,8,4,'2025-07-22 09:45:00'),(37,8,5,'2025-07-22 10:30:00'),(38,11,4,'2025-07-22 12:00:00'),(39,11,6,'2025-07-22 12:50:00'),(40,12,4,'2025-07-23 17:30:00'),(41,12,6,'2025-07-23 18:20:00');
 /*!40000 ALTER TABLE `schedule_stops` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +130,7 @@ CREATE TABLE `train_schedules` (
   CONSTRAINT `train_schedules_ibfk_2` FOREIGN KEY (`transit_line_id`) REFERENCES `transit_lines` (`transit_line_id`),
   CONSTRAINT `train_schedules_ibfk_3` FOREIGN KEY (`origin_station_id`) REFERENCES `stations` (`sid`),
   CONSTRAINT `train_schedules_ibfk_4` FOREIGN KEY (`destination_station_id`) REFERENCES `stations` (`sid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +139,7 @@ CREATE TABLE `train_schedules` (
 
 LOCK TABLES `train_schedules` WRITE;
 /*!40000 ALTER TABLE `train_schedules` DISABLE KEYS */;
-INSERT INTO `train_schedules` VALUES (1,1,1,1,5,'2025-07-16 07:00:00','2025-07-16 08:30:00',18.50),(2,2,1,5,1,'2025-07-16 18:00:00','2025-07-16 19:30:00',18.50),(3,3,2,6,6,'2025-07-16 08:45:00','2025-07-16 09:00:00',3.00),(4,1,1,1,5,'2025-07-16 09:00:00','2025-07-16 10:30:00',20.00),(5,2,1,1,5,'2025-07-16 11:00:00','2025-07-16 12:25:00',16.50),(6,1,1,1,5,'2025-07-16 15:00:00','2025-07-16 16:25:00',19.50);
+INSERT INTO `train_schedules` VALUES (1,1,1,1,5,'2025-07-16 07:00:00','2025-07-16 08:30:00',18.50),(2,2,1,5,1,'2025-07-16 18:00:00','2025-07-16 19:30:00',18.50),(3,3,2,6,6,'2025-07-16 08:45:00','2025-07-16 09:00:00',3.00),(4,1,1,1,5,'2025-07-16 09:00:00','2025-07-16 10:30:00',20.00),(5,2,1,1,5,'2025-07-16 11:00:00','2025-07-16 12:25:00',16.50),(6,1,1,1,5,'2025-07-16 15:00:00','2025-07-16 16:25:00',19.50),(7,1,1,1,5,'2025-07-20 10:00:00','2025-07-20 12:30:00',22.00),(8,2,1,1,5,'2025-07-21 15:00:00','2025-07-21 17:30:00',19.50),(9,1,1,1,5,'2025-07-22 09:00:00','2025-07-22 10:30:00',20.00),(10,1,1,1,5,'2025-07-23 13:30:00','2025-07-23 15:00:00',18.50),(11,1,1,1,5,'2025-07-24 16:00:00','2025-07-24 17:30:00',19.50),(12,1,1,4,6,'2025-07-22 12:00:00','2025-07-22 12:50:00',12.50),(13,1,1,4,6,'2025-07-23 17:30:00','2025-07-23 18:20:00',13.00);
 /*!40000 ALTER TABLE `train_schedules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,4 +227,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-16  8:18:27
+-- Dump completed on 2025-07-19  0:51:07
