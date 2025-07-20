@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Customer Rep Home</title>
 </head>
 <body>
 	<form method="get" action="LogoutServlet">
@@ -21,6 +21,7 @@
 	%>
 	<h2>Welcome, <%= username %>!</h2>
 	<a href="StationServlet">Go to Station Management Page</a><br/>
-	<a href="TrainlineServlet">Go to Train Line Management Page</a>
+	<a href="TrainlineServlet">Go to Train Line Management Page</a><br/>
+	<a href="TrainServlet">Go to Train Management Page</a><br/>
 </body>
 </html>

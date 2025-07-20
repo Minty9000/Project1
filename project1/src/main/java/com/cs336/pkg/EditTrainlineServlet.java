@@ -29,7 +29,7 @@ public class EditTrainlineServlet extends HttpServlet {
 
             try (Connection con = new ApplicationDB().getConnection()) {
                 String sql = """
-                    SELECT t.tlid, t.name, t.travelTime, t.numOfStops, t.fare,
+                    SELECT t.tlid, t.name, t.travel_time, t.total_stops, t.fare,
                            o.sid AS origin_sid, o.name AS origin_name, o.city AS origin_city, o.state AS origin_state,
                            d.sid AS destination_sid, d.name AS destination_name, d.city AS destination_city, d.state AS destination_state
                     FROM trainlines t
@@ -62,8 +62,8 @@ public class EditTrainlineServlet extends HttpServlet {
                                 rs.getString("name"),
                                 origin,
                                 destination,
-                                rs.getInt("travelTime"),
-                                rs.getInt("numOfStops"),
+                                rs.getInt("travel_time"),
+                                rs.getInt("total_stops"),
                                 rs.getFloat("fare")
                             );
                         }

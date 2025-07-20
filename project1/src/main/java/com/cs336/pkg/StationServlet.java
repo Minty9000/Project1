@@ -80,7 +80,7 @@ public class StationServlet extends HttpServlet {
 	    }
 
 	    request.setAttribute("stations", stationList);
-	    RequestDispatcher rd = request.getRequestDispatcher("rep.jsp");
+	    RequestDispatcher rd = request.getRequestDispatcher("rep-stations.jsp");
 	    rd.forward(request, response);
 	}
 

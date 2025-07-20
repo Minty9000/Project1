@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,48 +15,35 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-@WebServlet("/TrainlineServlet")
-public class TrainlineServlet extends HttpServlet {
+@WebServlet("/TrainServlet")
+public class TrainServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 
-		String name = request.getParameter("name");
-	    String originStr = request.getParameter("origin");
-	    String destinationStr = request.getParameter("destination");
-	    String travel_time_str = request.getParameter("travel_time");
-	    String fareStr = request.getParameter("fare");
+	    String tid = request.getParameter("tid");
+	    String trainline = request.getParameter("trainline");
 
-	    try {
-	        int origin = Integer.parseInt(originStr);
-	        int destination = Integer.parseInt(destinationStr);
-	        int travel_time = Integer.parseInt(travel_time_str);
-	        float fare = Float.parseFloat(fareStr);
+	    int rowsInserted = 0;
 
-	        try (Connection con = new ApplicationDB().getConnection()) {
-	            String sql = "INSERT INTO trainlines (name, origin, destination, travel_time, fare) VALUES (?, ?, ?, ?, ?)";
-	            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-	                pstmt.setString(1, name);
-	                pstmt.setInt(2, origin);
-	                pstmt.setInt(3, destination);
-	                pstmt.setInt(4, travel_time);
-	                pstmt.setFloat(5, fare);
+	    try (Connection con = new ApplicationDB().getConnection()) {
+	        String sql = "INSERT INTO trains (tid, trainline) VALUES (?, ?)";
+	        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+	            pstmt.setString(1, tid);
+	            pstmt.setString(2, trainline);
 
-	                int rowsInserted = pstmt.executeUpdate();
-
-	                if (rowsInserted > 0) {
-	                    response.sendRedirect("StationServlet"); // Or wherever you want
-	                } else {
-	                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	                }
-	            }
+	            rowsInserted = pstmt.executeUpdate();
 	        }
-
-	    } catch (NumberFormatException e) {
-	        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	    } catch (SQLException e) {
-	        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	        e.printStackTrace();
+	        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	        return;
+	    }
+
+	    if (rowsInserted > 0) {
+	    	response.sendRedirect("TrainServlet");
+	    } else {
+	        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	    }
 	}
 	
@@ -63,6 +51,29 @@ public class TrainlineServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 
+	    List<Train> trainList = new ArrayList<>();
+
+	    try (Connection con = new ApplicationDB().getConnection()) {
+	        String sql = """
+	            SELECT *
+	            FROM trains
+	        """;
+
+	        try (PreparedStatement pstmt = con.prepareStatement(sql);
+	             ResultSet rs = pstmt.executeQuery()) {
+
+	            while (rs.next()) {
+	                Train train = new Train(
+	                    rs.getString("tid")
+	                );
+
+	                trainList.add(train);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
 	    List<Trainline> trainlineList = new ArrayList<>();
 
 	    try (Connection con = new ApplicationDB().getConnection()) {
@@ -109,9 +120,40 @@ public class TrainlineServlet extends HttpServlet {
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
+	    
+	    List<Schedule> scheduleList = new ArrayList<>();
 
+	    try (Connection con = new ApplicationDB().getConnection()) {
+	        String sql = """
+	            SELECT s.train as train, t.name as trainline, s.departure_time as departure_time,
+	        		    	    s.arrival_time as arrival_time
+	            FROM schedules s
+	        	JOIN trainlines t ON t.tlid = s.trainline
+	        """;
+
+	        try (PreparedStatement pstmt = con.prepareStatement(sql);
+	             ResultSet rs = pstmt.executeQuery()) {
+
+	            while (rs.next()) {
+	                Schedule schedule = new Schedule(
+	                	rs.getInt("scid"),
+	                    rs.getString("train"),
+	                    rs.getString("trainline"),
+	                    rs.getObject("departure_time", LocalDateTime.class),
+	                    rs.getObject("arrival_time", LocalDateTime.class)
+	                );
+
+	                scheduleList.add(schedule);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    request.setAttribute("schedules", scheduleList);
 	    request.setAttribute("trainlines", trainlineList);
-	    RequestDispatcher rd = request.getRequestDispatcher("rep-trainlines.jsp");
+	    request.setAttribute("trains", trainList);
+	    RequestDispatcher rd = request.getRequestDispatcher("rep-trains.jsp");
 	    rd.forward(request, response);
 	}
 

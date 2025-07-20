@@ -32,5 +32,14 @@
     		<p style="color:red;"><%= errorMessage %></p>
 		<% } %>
 		
+		<h2>Create Account</h2>
+		<form method="post" action="RegisterServlet">
+        	Username: <input type="text" name="username" /><br/>
+        	Password: <input type="password" name="password" /><br/>
+        	Email: <input type="text" name="email" /><br/>
+        	Phone: <input type="text" name="phone" /><br/>
+        	<input type="submit" value="Register" />
+    	</form>
+		
 	</body>
 </html>

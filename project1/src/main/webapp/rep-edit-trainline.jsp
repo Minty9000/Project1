@@ -5,9 +5,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Edit Trainline</title>
 </head>
 <body>
+	<form action="TrainlineServlet" method="get">
+    	<input type="submit" value="Back">
+	</form>
+	
 	<%
 		Trainline t = (Trainline) request.getAttribute("trainline");
 		List<Station> stations = (List<Station>) request.getAttribute("stations");
@@ -15,13 +19,41 @@
 		
 		if (t != null) {
 	%>
-		<h2>Train Line Details</h2>
-	    <p><strong>Name:</strong> <%= t.name %></p>
-	    <p><strong>Origin:</strong> <%= t.origin.name %>, <%= t.origin.city %>, <%= t.origin.state %></p>
-	    <p><strong>Destination:</strong> <%= t.destination.name %>, <%= t.destination.city %>, <%= t.destination.state %></p>
-	    <p><strong>Travel Time:</strong> <%= t.travelTime %> minutes</p>
-	    <p><strong>Number of Stops:</strong> <%= t.numOfStops %></p>
-	    <p><strong>Fare:</strong> $<%= String.format("%.2f", t.fare) %></p>
+		<h2>Edit Train Line Details</h2>
+		<form method="post" action="UpdateTrainlineServlet">
+		    <input type="hidden" name="tlid" value="<%= t.tlid %>" />
+		
+		    <label><strong>Name:</strong></label>
+		    <input type="text" name="name" value="<%= t.name %>" required><br/>
+		
+		    <label><strong>Origin:</strong></label>
+		    <select name="origin" required>
+		        <% if (stations != null) {
+		            for (Station s : stations) { 
+		                String selected = (t.origin.sid == s.sid) ? "selected" : "";
+		        %>
+		            <option value="<%= s.sid %>" <%= selected %>><%= s.name %> (<%= s.city %>, <%= s.state %>)</option>
+		        <% }} %>
+		    </select><br/>
+		
+		    <label><strong>Destination:</strong></label>
+		    <select name="destination" required>
+		        <% if (stations != null) {
+		            for (Station s : stations) { 
+		                String selected = (t.destination.sid == s.sid) ? "selected" : "";
+		        %>
+		            <option value="<%= s.sid %>" <%= selected %>><%= s.name %> (<%= s.city %>, <%= s.state %>)</option>
+		        <% }} %>
+		    </select><br/>
+		
+		    <label><strong>Travel Time (min):</strong></label>
+		    <input type="number" name="travel_time" value="<%= t.travel_time %>" min="0" required><br/>
+		
+		    <label><strong>Fare ($):</strong></label>
+		    <input type="number" step="0.01" name="fare" value="<%= t.fare %>" min="0" required><br/><br/>
+		
+		    <input type="submit" value="Update Train Line">
+		</form>
 	    
 	    <h2>Stops</h2>
 		<% if (stops != null && !stops.isEmpty()) { %>

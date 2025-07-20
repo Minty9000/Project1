@@ -17,6 +17,7 @@ public class LoginServlet extends HttpServlet {
 
         boolean validUser = false;
         String role = null;
+        int user_id = -1;
 
         try (Connection con = new ApplicationDB().getConnection()) {
             String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
@@ -28,6 +29,7 @@ public class LoginServlet extends HttpServlet {
                     if (rs.next()) {
                         validUser = true;
                         role = rs.getString("role");
+                        user_id = rs.getInt("user_id");
                     }
                 }
             }
@@ -38,13 +40,14 @@ public class LoginServlet extends HttpServlet {
         if (validUser) {
         	// Store username in session
             HttpSession session = request.getSession();
+            session.setAttribute("user_id", user_id);
             session.setAttribute("username", username);
             session.setAttribute("role", role);
             
             // Login success — redirect based on role
             switch (role.toLowerCase()) {
             	case "customer":
-            		response.sendRedirect("customer.jsp");
+            		response.sendRedirect("customer-home.jsp");
             		break;
             	case "rep":
             		response.sendRedirect("rep-home.jsp");
